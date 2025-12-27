@@ -1,1 +1,46 @@
 
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FR COLOR - TASTO X HD</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="header">
+    <button class="btn btn-main" onclick="document.getElementById('c').click()">SCATTA HD</button>
+    <input type="file" id="c" accept="image/*" capture="environment" style="display:none">
+    <button class="btn" onclick="document.getElementById('u').click()">CARICA</button>
+    <input type="file" id="u" accept="image/*" style="display:none">
+    <button class="btn" onclick="undo()">BACK</button>
+</div>
+
+<div id="main">
+    <div class="side-zoom">
+        <b>+</b><input type="range" id="z" class="slider" min="0.1" max="4" step="0.1" value="1"><b>-</b>
+    </div>
+    <div id="viewport">
+        <canvas id="canvas"></canvas>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="mode-row">
+        <button id="bmf" class="m-btn active" onclick="setM('f')">FACCIATA</button>
+        <button id="bmc" class="m-btn" onclick="setM('c')">CORNICE</button>
+    </div>
+    <input type="text" id="ralSearch" class="search-input" placeholder="Cerca RAL (es. 7016)..." oninput="findRal(this.value)">
+    <div class="ral-display">
+        <div id="prev-col" class="color-preview" style="background: #788185;"></div>
+        <span id="ral-name">Selezionato: RAL 7000</span>
+    </div>
+    <button class="save-btn" onclick="save()">SALVA PROGETTO</button>
+</div>
+
+<script src="js/database-ral.js"></script>
+<script src="js/motore-x.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
