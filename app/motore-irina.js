@@ -1,3 +1,4 @@
+
 /* * PROGETTO: TASTO X - FR COLOR SYSTEM
  * MOTORE: IRINA (Versione 1.3 Finale Ultra HD)
  * STATUS: 100% FUNZIONANTE - COMPLETO AL 1000%
@@ -5,7 +6,7 @@
  */
 
 const MotoreIrina = {
-    // 1. VARIABILI DI STATO (Liscio/Ruvido/Standard)
+    // 1. STATO DEL MOTORE
     currentProfile: "standard",
     profili: {
         "standard": { tolleranza: 20, smoothing: 1 },
@@ -66,12 +67,10 @@ const MotoreIrina = {
     ],
 
     // 3. PUNTI FISSI TECNICI (BLINDATI)
-    // Formula Luminanza per realismo ombre [cite: 2025-12-27]
     getLuminance: function(r, g, b) {
         return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
     },
 
-    // Formula Puntamento HD [cite: 2025-12-27]
     getPointerCoords: function(clientX, clientY, rect, zoom) {
         return {
             x: (clientX - rect.left) / zoom,
@@ -79,7 +78,7 @@ const MotoreIrina = {
         };
     },
 
-    // 4. MIGLIORAMENTO BORDI (Campionamento Sub-pixel 2x2)
+    // 4. POTENZIAMENTO BORDI (Sub-pixel 2x2 Sempre Attivo)
     checkBorder: function(data, x, y, width, startLum, tolerance) {
         const i = (y * width + x) * 4;
         const l1 = this.getLuminance(data[i], data[i+1], data[i+2]);
@@ -92,6 +91,10 @@ const MotoreIrina = {
     setMode: function(mode) {
         if (this.profili[mode]) {
             this.currentProfile = mode;
+            // Aggiorna UI se necessario
+            document.querySelectorAll('.btn-irina').forEach(b => b.classList.remove('active'));
+            const activeBtn = document.querySelector(`.btn-irina[onclick*="${mode}"]`);
+            if(activeBtn) activeBtn.classList.add('active');
             console.log("Irina: Modalità " + mode + " attivata.");
         }
     },
@@ -103,7 +106,7 @@ const MotoreIrina = {
         return { r, g, b };
     },
 
-    // 6. LOGICA DI RIEMPIMENTO (Senza sbordature - usa ori.data)
+    // 6. LOGICA DI RIEMPIMENTO INTEGRALE
     applyFloodFill: function(ctx, startX, startY, hexColor, originalImageData) {
         const p = this.profili[this.currentProfile];
         const target = this.hexToRgb(hexColor);
@@ -129,14 +132,11 @@ const MotoreIrina = {
             const pos = idx * 4;
             const currentLum = this.getLuminance(ori[pos], ori[pos+1], ori[pos+2]);
 
-            // Se non è un bordo e rientra nella tolleranza
             if (!this.checkBorder(ori, x, y, width, startLum, p.tolleranza)) {
-                // Ricolorazione preservando ombre e riflessi [cite: 2025-12-27]
                 data[pos] = target.r * currentLum;
                 data[pos+1] = target.g * currentLum;
                 data[pos+2] = target.b * currentLum;
                 data[pos+3] = 255;
-
                 stack.push([x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]);
             }
         }
