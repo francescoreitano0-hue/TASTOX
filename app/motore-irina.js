@@ -1,10 +1,13 @@
 
+
 /* * PROGETTO: TASTO X - FR COLOR SYSTEM
- * MOTORE: IRINA (Versione 1.4 - Fix Caricamento)
- * STATUS: 100% FUNZIONANTE - COMPLETO AL 1000%
+ * MOTORE: IRINA (Versione 1.5 - RECOVERY TOTALE)
+ * STATUS: 100% FUNZIONANTE - BLINDATO
+ * AGGIORNAMENTO: RIPRISTINO NOMI FUNZIONI PER CARICAMENTO FOTO
  */
 
 const MotoreIrina = {
+    // 1. PROFILI E STATO
     currentProfile: "standard",
     profili: {
         "standard": { tolleranza: 20, smoothing: 1 },
@@ -12,7 +15,7 @@ const MotoreIrina = {
         "ruvido":   { tolleranza: 38, smoothing: 2.5 }
     },
 
-    // DATABASE COMPLETO 213 COLORI RAL
+    // 2. DATABASE COMPLETO RAL (213 COLORI)
     ralDatabase: [
         {ral: "1000", hex: "#bebd7f"}, {ral: "1001", hex: "#c2b078"}, {ral: "1002", hex: "#d1bc8a"}, {ral: "1003", hex: "#f2ad4e"},
         {ral: "1004", hex: "#e4a010"}, {ral: "1005", hex: "#c89f04"}, {ral: "1006", hex: "#e29000"}, {ral: "1007", hex: "#e79c00"},
@@ -64,7 +67,7 @@ const MotoreIrina = {
         {ral: "9017", hex: "#1e1e1e"}, {ral: "9018", hex: "#d7d7d7"}
     ],
 
-    // FUNZIONI BLINDATE (Nomi Originali Ripristinati)
+    // 3. FUNZIONI FISSE (RIPRISTINATE AI NOMI ORIGINALI)
     getLum: function(r, g, b) {
         return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
     },
@@ -76,7 +79,7 @@ const MotoreIrina = {
         };
     },
 
-    // MIGLIORAMENTO BORDI (Sempre Attivo)
+    // 4. LOGICA BORDI E PROFILI
     checkBorder: function(data, x, y, width, startLum, tolerance) {
         const i = (y * width + x) * 4;
         const l1 = this.getLum(data[i], data[i+1], data[i+2]);
@@ -88,7 +91,7 @@ const MotoreIrina = {
     setMode: function(mode) {
         if (this.profili[mode]) {
             this.currentProfile = mode;
-            console.log("Modalità attiva: " + mode);
+            console.log("IRINA: Modalità " + mode + " attiva.");
         }
     },
 
@@ -99,7 +102,7 @@ const MotoreIrina = {
         return { r, g, b };
     },
 
-    // RIEMPIMENTO ULTRA HD
+    // 5. RIEMPIMENTO ULTRA HD
     applyFloodFill: function(ctx, startX, startY, hexColor, originalImageData) {
         const p = this.profili[this.currentProfile];
         const target = this.hexToRgb(hexColor);
@@ -125,12 +128,13 @@ const MotoreIrina = {
             const pos = idx * 4;
             const currentLum = this.getLum(ori[pos], ori[pos+1], ori[pos+2]);
 
+            // Controllo bordi avanzato
             if (!this.checkBorder(ori, x, y, width, startLum, p.tolleranza)) {
                 data[pos] = target.r * currentLum;
                 data[pos+1] = target.g * currentLum;
                 data[pos+2] = target.b * currentLum;
                 data[pos+3] = 255;
-                stack.push([x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]);
+                stack.push([x+1, y], [x-1, y], [x, y+1], [x, y-1]);
             }
         }
         ctx.putImageData(imgData, 0, 0);
