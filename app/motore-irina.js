@@ -1,108 +1,127 @@
 
-/* * PROGETTO: TASTO X - FR COLOR SYSTEM
- * MOTORE: IRINA (Versione 1.8 - ULTRA COMPLETA)
- * STATUS: 100% FUNZIONANTE - DATABASE INTEGRALE
+/* MOTORE IRINA - ESTRATTO DA FR COLOR TURBO HD 
+ * AGGIORNAMENTO 1000x1000: PROFILI + DATABASE INTEGRALE
  */
 
-const MotoreIrina = {
-    canvas: null,
-    ctx: null,
-    originalData: null,
-    currentProfile: "standard",
-    zoom: 1,
-
-    profili: {
-        "standard": { tolleranza: 20 },
-        "liscio":   { tolleranza: 12 },
-        "ruvido":   { tolleranza: 38 }
-    },
-
-    // DATABASE INTEGRALE 213 COLORI RAL CLASSIC
-    ralDatabase: [
-        {ral:"1000",hex:"#bebd7f"},{ral:"1001",hex:"#c2b078"},{ral:"1002",hex:"#d1bc8a"},{ral:"1003",hex:"#f2ad4e"},{ral:"1004",hex:"#e4a010"},{ral:"1005",hex:"#c89f04"},{ral:"1006",hex:"#e29000"},{ral:"1007",hex:"#e79c00"},{ral:"1011",hex:"#af8a54"},{ral:"1012",hex:"#d9c022"},{ral:"1013",hex:"#e5d691"},{ral:"1014",hex:"#e1cc4f"},{ral:"1015",hex:"#e6d690"},{ral:"1016",hex:"#edee1b"},{ral:"1017",hex:"#f5ab6e"},{ral:"1018",hex:"#f8f32b"},{ral:"1019",hex:"#9e9764"},{ral:"1020",hex:"#999950"},{ral:"1021",hex:"#f3da0b"},{ral:"1023",hex:"#f2c037"},{ral:"1024",hex:"#a48e52"},{ral:"1027",hex:"#a28d13"},{ral:"1028",hex:"#f4a912"},{ral:"1032",hex:"#e1a102"},{ral:"1033",hex:"#f3a550"},{ral:"1034",hex:"#efa35c"},{ral:"1037",hex:"#f09205"},{ral:"2000",hex:"#da6e00"},{ral:"2001",hex:"#bc4e11"},{ral:"2002",hex:"#b6361c"},{ral:"2003",hex:"#f07229"},{ral:"2004",hex:"#e25303"},{ral:"2008",hex:"#f06422"},{ral: "2009", hex: "#e75b12"}, {ral: "2010", hex: "#d54d1e"}, {ral: "2011", hex: "#eb610d"}, {ral: "2012", hex: "#e75443"},
-        {ral:"3000",hex:"#af2b1e"},{ral:"3001",hex:"#a02128"},{ral:"3002",hex:"#a1232b"},{ral:"3003",hex:"#8d1d2c"},{ral:"3004",hex:"#701f29"},{ral:"3005",hex:"#5e2028"},{ral:"3007",hex:"#402225"},{ral:"3009",hex:"#703731"},{ral:"3011",hex:"#7e292c"},{ral:"3012",hex:"#cb8d73"},{ral:"3013",hex:"#9c322e"},{ral:"3014",hex:"#d47479"},{ral:"3015",hex:"#e1a6ad"},{ral:"3016",hex:"#ac4034"},{ral:"3017",hex:"#d3545f"},{ral:"3018",hex:"#d14152"},{ral:"3020",hex:"#c1121c"},{ral:"3022",hex:"#d56d56"},{ral:"3027",hex:"#b42041"},{ral:"3031",hex:"#ac323b"},
-        {ral:"4001",hex:"#8a5a83"},{ral:"4002",hex:"#933d50"},{ral:"4003",hex:"#d05d8e"},{ral:"4004",hex:"#69193b"},{ral:"4005",hex:"#7e5e9b"},{ral:"4006",hex:"#992572"},{ral:"4007",hex:"#4a203b"},{ral:"4008",hex:"#904684"},{ral:"4009",hex:"#a18594"},{ral:"4010",hex:"#c33a71"},
-        {ral:"5000",hex:"#2f4a71"},{ral:"5001",hex:"#21445b"},{ral:"5002",hex:"#223c82"},{ral:"5003",hex:"#232d4b"},{ral:"5004",hex:"#1d1f2a"},{ral:"5005",hex:"#154889"},{ral:"5007",hex:"#41678d"},{ral:"5008",hex:"#2f353e"},{ral:"5009",hex:"#285a73"},{ral:"5010",hex:"#0e466a"},{ral:"5011",hex:"#1c2838"},{ral:"5012",hex:"#2781bb"},{ral:"5013",hex:"#1e2840"},{ral:"5014",hex:"#637691"},{ral:"5015",hex:"#1a77bb"},{ral:"5017",hex:"#06518c"},{ral:"5018",hex:"#348182"},{ral:"5019",hex:"#0e5d80"},{ral:"5020",hex:"#134447"},{ral:"5021",hex:"#075554"},{ral:"5022",hex:"#1e213d"},{ral:"5023",hex:"#466085"},{ral:"5024",hex:"#5d88a2"},
-        {ral:"6000",hex:"#316a50"},{ral:"6001",hex:"#316e34"},{ral:"6002",hex:"#2d572c"},{ral:"6003",hex:"#4d543b"},{ral:"6004",hex:"#1a3b35"},{ral:"6005",hex:"#163a2c"},{ral:"6006",hex:"#3e3d32"},{ral:"6007",hex:"#273123"},{ral:"6008",hex:"#313023"},{ral:"6009",hex:"#222f26"},{ral:"6010",hex:"#457a33"},{ral:"6011",hex:"#667c54"},{ral:"6012",hex:"#2e3b38"},{ral:"6013",hex:"#76724a"},{ral:"6014",hex:"#444337"},{ral:"6015",hex:"#373a30"},{ral:"6016",hex:"#006646"},{ral:"6017",hex:"#4d8542"},{ral:"6018",hex:"#57a639"},{ral:"6019",hex:"#bde1ac"},{ral:"6020",hex:"#37412e"},{ral:"6021",hex:"#87a180"},{ral:"6022",hex:"#25241d"},{ral:"6024",hex:"#008351"},{ral:"6025",hex:"#567633"},{ral:"6026",hex:"#005c54"},{ral:"6027",hex:"#81c0bb"},{ral:"6028",hex:"#2d5546"},{ral:"6029",hex:"#00722d"},{ral:"6032",hex:"#0f8d58"},{ral:"6033",hex:"#41897e"},{ral:"6034",hex:"#7fb1b1"},
-        {ral:"7000",hex:"#7a888e"},{ral:"7001",hex:"#8a9597"},{ral:"7002",hex:"#7e7b52"},{ral:"7003",hex:"#7a7b6d"},{ral:"7004",hex:"#969992"},{ral:"7005",hex:"#646b63"},{ral:"7006",hex:"#6d6552"},{ral:"7008",hex:"#6a5f31"},{ral:"7009",hex:"#5d6150"},{ral:"7010",hex:"#565a5c"},{ral:"7011",hex:"#4e5658"},{ral:"7012",hex:"#575d57"},{ral:"7013",hex:"#514e3e"},{ral:"7015",hex:"#4b4d52"},{ral:"7016",hex:"#383e42"},{ral:"7021",hex:"#2f3234"},{ral:"7022",hex:"#4b4d46"},{ral:"7023",hex:"#7e827a"},{ral:"7024",hex:"#45494e"},{ral:"7026",hex:"#2f363d"},{ral:"7030",hex:"#939388"},{ral:"7031",hex:"#5b6870"},{ral:"7032",hex:"#b8b799"},{ral:"7033",hex:"#7d8471"},{ral:"7034",hex:"#8f8b66"},{ral:"7035",hex:"#d7d7d7"},{ral:"7036",hex:"#9495a1"},{ral:"7037",hex:"#787b80"},{ral:"7038",hex:"#b5b8b1"},{ral:"7039",hex:"#6c6960"},{ral:"7040",hex:"#9da3a6"},{ral:"7042",hex:"#8f9696"},{ral:"7043",hex:"#4e5452"},{ral:"7044",hex:"#b9b9a8"},{ral:"7045",hex:"#909090"},{ral:"7046",hex:"#82898f"},{ral:"7047",hex:"#d0d0d0"},
-        {ral:"8000",hex:"#826c34"},{ral:"8001",hex:"#955f20"},{ral:"8002",hex:"#6c3b2a"},{ral:"8003",hex:"#734222"},{ral:"8004",hex:"#8e402a"},{ral:"8007",hex:"#59351f"},{ral:"8008",hex:"#6f4f28"},{ral:"8011",hex:"#5b3a24"},{ral:"8012",hex:"#592321"},{ral:"8014",hex:"#382c1e"},{ral:"8015",hex:"#491f1a"},{ral:"8016",hex:"#3c2219"},{ral:"8017",hex:"#2d1c12"},{ral:"8019",hex:"#3b3332"},{ral:"8022",hex:"#1a1615"},{ral:"8023",hex:"#a65e2e"},{ral:"8024",hex:"#79553d"},{ral:"8025",hex:"#755c48"},{ral:"8028",hex:"#4e3b31"},
-        {ral:"9001",hex:"#f1ebe1"},{ral:"9002",hex:"#e7ebda"},{ral:"9003",hex:"#f4f4f4"},{ral:"9004",hex:"#282828"},{ral:"9005",hex:"#0a0a0a"},{ral:"9006",hex:"#a5a5a5"},{ral:"9007",hex:"#8f8f8f"},{ral:"9010",hex:"#ffffff"},{ral:"9011",hex:"#1c1c1c"},{ral:"9016",hex:"#f6f6f6"},{ral:"9017",hex:"#1e1e1e"},{ral:"9018",hex:"#d7d7d7"}
-    ],
-
-    // FORMULE FISSE
-    getLum: function(r, g, b) { return (0.299 * r + 0.587 * g + 0.114 * b) / 255; },
-    getXY: function(e, rect, zoom) { return { x: (e.clientX - rect.left) / zoom, y: (e.clientY - rect.top) / zoom }; },
-
-    // SISTEMA DI CARICAMENTO INTEGRATO
-    init: function(canvasId, inputId) {
-        this.canvas = document.getElementById(canvasId);
-        if(!this.canvas) return;
-        this.ctx = this.canvas.getContext('2d', { willReadFrequently: true });
-        
-        const input = document.getElementById(inputId);
-        if(input) {
-            input.onchange = (e) => {
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        this.canvas.width = img.width;
-                        this.canvas.height = img.height;
-                        this.ctx.drawImage(img, 0, 0);
-                        this.originalData = this.ctx.getImageData(0, 0, img.width, img.height);
-                    };
-                    img.src = ev.target.result;
-                };
-                reader.readAsDataURL(e.target.files[0]);
-            };
-        }
-    },
-
-    setMode: function(m) { this.currentProfile = m; },
-
-    // RIEMPIMENTO ULTRA HD
-    applyFloodFill: function(startX, startY, hexColor) {
-        if (!this.originalData) return;
-        const target = this.hexToRgb(hexColor);
-        const width = this.canvas.width;
-        const height = this.canvas.height;
-        const imgData = this.ctx.getImageData(0, 0, width, height);
-        const data = imgData.data;
-        const ori = this.originalData.data;
-
-        const stack = [[Math.round(startX), Math.round(startY)]];
-        const startPos = (Math.round(startY) * width + Math.round(startX)) * 4;
-        const startLum = this.getLum(ori[startPos], ori[startPos+1], ori[startPos+2]);
-        const visited = new Uint8Array(width * height);
-        const tol = this.profili[this.currentProfile].tolleranza / 100;
-
-        while(stack.length) {
-            const [x, y] = stack.pop();
-            const idx = y * width + x;
-            if (x < 0 || x >= width || y < 0 || y >= height || visited[idx]) continue;
-            visited[idx] = 1;
-            const pos = idx * 4;
-            const curLum = this.getLum(ori[pos], ori[pos+1], ori[pos+2]);
-
-            if (Math.abs(curLum - startLum) < tol) {
-                data[pos] = target.r * curLum;
-                data[pos+1] = target.g * curLum;
-                data[pos+2] = target.b * curLum;
-                data[pos+3] = 255;
-                stack.push([x+1, y],[x-1, y],[x, y+1],[x, y-1]);
-            }
-        }
-        this.ctx.putImageData(imgData, 0, 0);
-    },
-
-    hexToRgb: function(hex) {
-        return {
-            r: parseInt(hex.slice(1, 3), 16),
-            g: parseInt(hex.slice(3, 5), 16),
-            b: parseInt(hex.slice(5, 7), 16)
-        };
-    }
+const RAL_DB = {
+    "1000":[190,189,127],"1001":[194,176,120],"1002":[198,166,100],"1003":[243,187,15],"1004":[238,172,9],"1005":[200,143,0],"1006":[226,144,0],"1007":[232,140,0],"1011":[175,128,79],"1012":[221,175,39],"1013":[232,226,204],"1014":[225,204,150],"1015":[230,214,179],"1016":[241,232,55],"1017":[246,169,80],"1018":[250,202,48],"1019":[164,146,129],"1020":[160,147,110],"1021":[242,182,0],"1023":[247,181,0],"1024":[186,143,76],"1027":[163,133,0],"1028":[255,163,0],"1032":[226,163,0],"1033":[249,154,28],"1034":[235,156,82],"1037":[243,153,0],"2000":[218,110,0],"2001":[188,78,17],"2002":[182,54,28],"2003":[255,117,38],"2004":[244,70,17],"2005":[255,35,1],"2008":[255,121,34],"2009":[229,81,18],"2010":[213,77,30],"2011":[236,97,13],"2012":[231,84,67],"3000":[175,43,30],"3001":[160,33,40],"3002":[162,35,43],"3003":[141,29,44],"3004":[112,31,41],"3005":[94,32,40],"3007":[64,34,37],"3009":[112,55,49],"3011":[126,41,44],"3012":[203,141,115],"3013":[156,50,46],"3014":[212,116,121],"3015":[225,166,173],"3016":[172,64,52],"3017":[211,84,95],"3018":[209,65,82],"3020":[193,18,28],"3022":[213,109,86],"3024":[248,0,0],"3026":[254,0,0],"3027":[180,32,65],"3031":[172,50,59],"4001":[138,90,131],"4002":[147,61,80],"4003":[208,93,142],"4004":[105,25,59],"4005":[126,94,155],"4006":[153,37,114],"4007":[74,32,59],"4008":[144,70,132],"4009":[161,133,148],"4010":[195,58,113],"5000":[47,74,113],"5001":[33,68,91],"5002":[34,60,130],"5003":[35,45,75],"5004":[29,31,42],"5005":[21,72,137],"5007":[65,103,141],"5008":[47,53,62],"5009":[40,90,115],"5010":[14,70,106],"5011":[28,40,56],"5012":[39,129,187],"5013":[30,40,64],"5014":[99,118,145],"5015":[26,119,187],"5017":[6,81,140],"5018":[52,129,130],"5019":[14,93,128],"5020":[19,68,71],"5021":[7,85,84],"5022":[30,33,61],"5023":[70,96,133],"5024":[93,136,162],"6000":[49,106,80],"6001":[49,110,52],"6002":[45,87,44],"6003":[77,84,59],"6004":[26,59,53],"6005":[22,58,44],"6006":[62,61,50],"6007":[39,49,35],"6008":[49,48,35],"6009":[34,47,38],"6010":[69,122,51],"6011":[102,124,84],"6012":[46,59,56],"6013":[118,114,74],"6014":[68,67,55],"6015":[55,58,48],"6016":[0,102,70],"6017":[77,133,66],"6018":[87,166,57],"6019":[189,225,172],"6020":[55,65,46],"6021":[135,161,128],"6022":[37,36,29],"6024":[0,131,81],"6025":[86,118,51],"6026":[0,92,84],"6027":[129,192,187],"6028":[45,85,70],"6029":[0,114,45],"6032":[15,141,88],"6033":[65,137,126],"6034":[127,177,177],"7000":[122,136,142],"7001":[138,149,151],"7002":[126,123,82],"7003":[122,123,109],"7004":[150,153,146],"7005":[100,107,99],"7006":[109,101,82],"7008":[106,95,49],"7009":[93,97,80],"7010":[86,90,92],"7011":[78,86,88],"7012":[87,93,87],"7013":[81,78,62],"7015":[75,77,82],"7016":[56,62,66],"7021":[47,50,52],"7022":[75,77,70],"7023":[126,130,122],"7024":[69,73,78],"7026":[47,54,61],"7030":[147,147,136],"7031":[91,104,112],"7032":[184,183,153],"7033":[125,132,113],"7034":[143,139,102],"7035":[215,215,215],"7036":[148,149,161],"7037":[120,123,128],"7038":[181,184,177],"7039":[108,105,96],"7040":[157,163,166],"7042":[143,150,150],"7043":[78,84,82],"7044":[185,185,168],"7045":[144,144,144],"7046":[130,137,143],"7047":[208,208,208],"8000":[130,108,52],"8001":[149,95,32],"8002":[108,59,42],"8003":[115,66,34],"8004":[142,64,42],"8007":[89,53,31],"8008":[111,79,40],"8011":[91,58,36],"8012":[89,35,33],"8014":[56,44,30],"8015":[73,31,26],"8016":[60,34,25],"8017":[45,28,18],"8019":[59,51,50],"8022":[26,22,21],"8023":[166,94,46],"8024":[121,85,61],"8025":[117,92,72],"8028":[78,59,49],"9001":[241,235,225],"9002":[231,235,218],"9003":[244,244,244],"9004":[40,40,40],"9005":[10,10,10],"9006":[165,165,165],"9007":[143,143,143],"9010":[255,255,255],"9011":[28,28,28],"9016":[246,246,246],"9017":[30,30,30],"9018":[215,215,215]
 };
 
-window.onload = () => MotoreIrina.init('mainCanvas', 'fileInput');
-window.MotoreIrina = MotoreIrina;
+// AGGIORNAMENTO PROFILI
+const PROFILI = { "liscio": 45, "standard": 65, "ruvido": 95 };
+let tolleranzaAttuale = 65;
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d', {willReadFrequently: true});
+const z = document.getElementById('z'), view = document.getElementById('viewport');
+let ori = null, hist = [], mode = 'f', curF = [255,255,255], curC = [255,255,255];
+
+// CARICAMENTO FOTO (Blindato)
+function load(e) {
+    const f = e.target.files[0];
+    if(!f) return;
+    const r = new FileReader();
+    r.onload = (ev) => {
+        const i = new Image();
+        i.onload = () => {
+            canvas.width = i.width; canvas.height = i.height;
+            ctx.drawImage(i,0,0);
+            ori = ctx.getImageData(0,0,i.width,i.height);
+            hist = [ctx.getImageData(0,0,i.width,i.height)];
+            applyZ();
+        };
+        i.src = ev.target.result;
+    };
+    r.readAsDataURL(f);
+}
+document.getElementById('u').onchange = load;
+document.getElementById('c').onchange = load;
+
+// ZOOM (Blindato)
+function applyZ() { canvas.style.transform = `scale(${z.value})`; }
+z.oninput = applyZ;
+
+// CAMBIO MODALITÀ (Blindato)
+function setM(m) {
+    mode = m;
+    document.getElementById('bmf').className = m==='f'?'m-btn active':'m-btn';
+    document.getElementById('bmc').className = m==='c'?'m-btn active':'m-btn';
+}
+
+// NUOVO: CAMBIO PROFILO PARETE
+function setP(p) {
+    tolleranzaAttuale = PROFILI[p];
+    document.getElementById('p-liscio').className = p==='liscio'?'m-btn active':'m-btn';
+    document.getElementById('p-std').className = p==='standard'?'m-btn active':'m-btn';
+    document.getElementById('p-ruvido').className = p==='ruvido'?'m-btn active':'m-btn';
+}
+
+// RICERCA RAL (Blindato)
+function findRal(q) {
+    const res = document.getElementById('ralRes');
+    res.innerHTML = '';
+    if(q.length<2) return;
+    Object.keys(RAL_DB).forEach(k => {
+        if(k.includes(q)) {
+            const d = document.createElement('div');
+            d.className = 'ral-item';
+            d.style.background = `rgb(${RAL_DB[k].join(',')})`;
+            d.onclick = () => {
+                if(mode==='f') curF = RAL_DB[k]; else curC = RAL_DB[k];
+                document.getElementById('ralSearch').value = 'RAL ' + k;
+                res.innerHTML = '';
+            };
+            res.appendChild(d);
+        }
+    });
+}
+
+// MOTORE COLORAZIONE TURBO HD (Aggiornato con Profilo)
+canvas.onclick = (e) => {
+    if(!ori) return;
+    const s = z.value;
+    const rect = canvas.getBoundingClientRect();
+    const startX = Math.round((e.clientX - rect.left) / s);
+    const startY = Math.round((e.clientY - rect.top) / s);
+    const color = mode === 'f' ? curF : curC;
+    
+    const img = ctx.getImageData(0,0,canvas.width,canvas.height);
+    const data = img.data, w = canvas.width, h = canvas.height;
+    const pos = (startY * w + startX) * 4;
+    const targetR = data[pos], targetG = data[pos+1], targetB = data[pos+2];
+    
+    const stack = [[startX, startY]];
+    const visited = new Uint8Array(w * h);
+    const tol = tolleranzaAttuale; // USA IL PROFILO SCELTO
+
+    function match(p) {
+        return Math.abs(data[p]-targetR)<tol && Math.abs(data[p+1]-targetG)<tol && Math.abs(data[p+2]-targetB)<tol;
+    }
+
+    while(stack.length) {
+        let [x, y] = stack.pop();
+        let p = (y * w + x) * 4;
+        while(y >= 0 && match(p)) { y--; p -= w * 4; }
+        p += w * 4; y++;
+        let reachLeft = false, reachRight = false;
+        while(y < h && match(p)) {
+            // Formula Lum Blindata per realismo ombre
+            const lum = (0.299 * ori.data[p] + 0.587 * ori.data[p+1] + 0.114 * ori.data[p+2]) / 255;
+            data[p] = color[0] * lum; data[p+1] = color[1] * lum; data[p+2] = color[2] * lum;
+            visited[y * w + x] = 1;
+            if(x > 0) {
+                if(match(p-4) && !visited[y*w+(x-1)]) { if(!reachLeft){stack.push([x-1,y]); reachLeft=true;} }
+                else if(reachLeft){reachLeft=false;}
+            }
+            if(x < w-1) {
+                if(match(p+4) && !visited[y*w+(x+1)]) { if(!reachRight){stack.push([x+1,y]); reachRight=true;} }
+                else if(reachRight){reachRight=false;}
+            }
+            y++; p += w * 4;
+        }
+    }
+    ctx.putImageData(img,0,0);
+    hist.push(ctx.getImageData(0,0,w,h));
+};
+
+function undo() { if(hist.length>1){hist.pop(); ctx.putImageData(hist[hist.length-1],0,0);} }
