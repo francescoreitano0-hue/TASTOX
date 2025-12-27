@@ -1,4 +1,3 @@
-
 :root { 
     --accent: #1D3557; 
     --bg: #F5F5F7; 
@@ -20,7 +19,6 @@ body {
     overflow: hidden; 
 }
 
-/* HEADER - GRAFICA BLINDATA */
 .header { 
     height: 55px; 
     background: var(--surface); 
@@ -47,22 +45,20 @@ body {
 
 .btn-main { background: var(--accent); color: #fff; }
 
-/* AREA LAVORO - FLUIDA */
-#main { flex: 1; position: relative; overflow: hidden; background: #1a1a1a; display: flex; }
+#main { flex: 1; display: flex; overflow: hidden; position: relative; }
 
 .side-zoom { 
-    width: 45px; 
-    background: rgba(255,255,255,0.05); 
+    width: 40px; 
+    background: var(--surface); 
     display: flex; 
     flex-direction: column; 
     align-items: center; 
     justify-content: center; 
+    gap: 20px; 
     border-right: 1px solid var(--border); 
-    z-index: 20; 
-    color: white; 
 }
 
-.slider { appearance: slider-vertical; width: 20px; height: 180px; }
+.slider { appearance: none; width: 120px; height: 4px; background: var(--border); transform: rotate(-90deg); }
 
 #viewport { 
     flex: 1; 
@@ -74,7 +70,6 @@ body {
 
 canvas { transform-origin: 0 0; display: inline-block; cursor: crosshair; }
 
-/* FOOTER - GRAFICA BLINDATA */
 .footer { 
     min-height: 165px; 
     background: var(--surface); 
@@ -108,56 +103,11 @@ canvas { transform-origin: 0 0; display: inline-block; cursor: crosshair; }
     background: #fff; 
     color: var(--text); 
     border: 1px solid var(--accent); 
+    border-radius: 6px; 
     padding: 10px; 
-    border-radius: 6px; 
-    font-size: 14px; 
+    font-weight: 700; 
 }
 
-.ral-display { 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    background: #f0f0f0; 
-    padding: 8px; 
-    border-radius: 6px; 
-    font-size: 12px; 
-}
+.ral-grid { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; }
 
-.color-preview { width: 25px; height: 25px; border-radius: 4px; border: 1px solid #ddd; }
-
-.save-btn { 
-    background: var(--accent); 
-    color: #fff; 
-    padding: 12px; 
-    border: none; 
-    border-radius: 6px; 
-    font-weight: 800; 
-    text-transform: uppercase; 
-    font-size: 11px; 
-}
-.irina-controls {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin: 15px 0;
-    width: 100%;
-}
-
-.btn-irina {
-    flex: 1;
-    padding: 12px 5px;
-    border: 2px solid #2c3e50;
-    background: #fff;
-    color: #2c3e50;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-size: 11px;
-    transition: 0.3s;
-}
-
-.btn-irina.active {
-    background: #2c3e50;
-    color: #fff;
-}
+.ral-item { min-width: 45px; height: 45px; border-radius: 4px; border: 1px solid var(--border); flex-shrink: 0; }
