@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -39,7 +37,11 @@
         <button id="bmc" class="m-btn" onclick="setM('c')">CORNICE</button>
     </div>
     <input type="text" id="ralSearch" class="search-input" placeholder="Cerca RAL (es. 7016)..." oninput="findRal(this.value)">
-    <div id="ralRes" class="ral-grid"></div>
+    <div class="ral-display">
+        <div id="prev-col" class="color-preview" style="background: #788185;"></div>
+        <span id="ral-name">Selezionato: RAL 7000</span>
+    </div>
+    <button class="save-btn" onclick="save()">SALVA PROGETTO</button>
 </div>
 
 <script src="app/motore-irina.js"></script>
