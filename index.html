@@ -27,23 +27,20 @@
 </div>
 
 <div class="footer">
+    <div class="mode-row" style="margin-bottom: 5px;">
+        <button id="p-liscio" class="m-btn" onclick="setP('liscio')">LISCIO</button>
+        <button id="p-std" class="m-btn active" onclick="setP('standard')">STANDARD</button>
+        <button id="p-ruvido" class="m-btn" onclick="setP('ruvido')">RUVIDO</button>
+    </div>
+
     <div class="mode-row">
         <button id="bmf" class="m-btn active" onclick="setM('f')">FACCIATA</button>
         <button id="bmc" class="m-btn" onclick="setM('c')">CORNICE</button>
     </div>
     <input type="text" id="ralSearch" class="search-input" placeholder="Cerca RAL (es. 7016)..." oninput="findRal(this.value)">
-    <div class="ral-display">
-        <div id="prev-col" class="color-preview" style="background: #788185;"></div>
-        <span id="ral-name">Selezionato: RAL 7000</span>
-    </div>
-    <button class="save-btn" onclick="save()">SALVA PROGETTO</button>
+    <div id="ralRes" class="ral-grid"></div>
 </div>
 
 <script src="app/motore-irina.js"></script>
 </body>
 </html>
-<div class="irina-controls">
-    <button class="btn-irina" onclick="MotoreIrina.setMode('liscio')">Liscio</button>
-    <button class="btn-irina active" onclick="MotoreIrina.setMode('standard')">Standard</button>
-    <button class="btn-irina" onclick="MotoreIrina.setMode('ruvido')">Ruvido</button>
-</div>
